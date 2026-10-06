@@ -38,4 +38,9 @@ public class CategoryController {
     public void deleteCategory(@PathVariable Long id) {
         categoryService.deleteCategoryById(id);
     }
+
+    @PatchMapping("/update")
+    public CategoryUpdateDTO updateCategory(@Valid @RequestBody CategoryUpdateDTO updateDTO) {
+        return categoryService.updateCategory(updateDTO);
+    }
 }
