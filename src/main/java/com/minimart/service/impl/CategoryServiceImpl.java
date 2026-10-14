@@ -41,6 +41,7 @@ public class CategoryServiceImpl implements CategoryService {
                 .map(this::mapToDTO)
                 .toList();
     }
+    
 
     @Override
     public CategoryResponseDTO getCategoryById(Long id) {

@@ -6,6 +6,7 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
+
 import java.util.List;
 
 @RestController
@@ -27,6 +28,7 @@ public class CategoryController {
 
         return categoryService.getAllCategories();
     }
+
 
     @GetMapping("/{id}")
     public CategoryResponseDTO getById(@PathVariable Long id) {
