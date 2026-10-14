@@ -41,6 +41,7 @@ public class CategoryServiceImpl implements CategoryService {
                 .map(this::mapToDTO)
                 .toList();
     }
+    
 
     @Override
     public CategoryResponseDTO getCategoryById(Long id) {
@@ -73,7 +74,33 @@ public class CategoryServiceImpl implements CategoryService {
         }
 
         categoryRepository.deleteById(id);
+    }
 
-        // return true;
+    private CategoryUpdateDTO mapToUpdateDTO(Category category) {
+        return CategoryUpdateDTO.builder()
+                .id(category.getId())
+                .name(category.getName())
+                .description(category.getDescription())
+                .build();
+    }
+
+    public CategoryUpdateDTO updateCategory(CategoryUpdateDTO updateDTO) {
+        Optional<Category> foundId = categoryRepository.findById(updateDTO.getId());
+        if(foundId.isEmpty()) {
+            throw new ResourceNotFoundException("Category with provided Id : " + updateDTO.getId() + " is not found");
+        }
+
+        Category updateCategoryObj = foundId.get();
+
+        if(updateDTO.getName() != null) {
+            updateCategoryObj.setName(updateDTO.getName());
+        }
+
+        if(updateDTO.getDescription() != null){
+            updateCategoryObj.setDescription(updateDTO.getDescription());
+        }
+
+        Category updatedCategoryObj = categoryRepository.save(updateCategoryObj);
+        return mapToUpdateDTO(updatedCategoryObj);
     }
 }

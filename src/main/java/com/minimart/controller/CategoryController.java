@@ -6,6 +6,7 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
+
 import java.util.List;
 
 @RestController
@@ -28,6 +29,7 @@ public class CategoryController {
         return categoryService.getAllCategories();
     }
 
+
     @GetMapping("/{id}")
     public CategoryResponseDTO getById(@PathVariable Long id) {
 
@@ -37,5 +39,10 @@ public class CategoryController {
     @DeleteMapping("/{id}")
     public void deleteCategory(@PathVariable Long id) {
         categoryService.deleteCategoryById(id);
+    }
+
+    @PatchMapping("/update")
+    public CategoryUpdateDTO updateCategory(@Valid @RequestBody CategoryUpdateDTO updateDTO) {
+        return categoryService.updateCategory(updateDTO);
     }
 }
