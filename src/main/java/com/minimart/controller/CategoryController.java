@@ -6,6 +6,12 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
+
 
 import java.util.List;
 
@@ -24,9 +30,10 @@ public class CategoryController {
     }
 
     @GetMapping
-    public List<CategoryResponseDTO> getAllCategories() {
+    public Page<CategoryResponseDTO> getAllCategories(@PageableDefault(size=2, page=0, sort="name", direction=Sort.Direction.ASC)
+        Pageable pageable) {
 
-        return categoryService.getAllCategories();
+        return categoryService.getAllCategories(pageable);
     }
 
 

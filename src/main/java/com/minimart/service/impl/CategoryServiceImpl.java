@@ -13,6 +13,11 @@ import com.minimart.exception.ResourceNotFoundException;
 import com.minimart.exception.ResourceInUseException;
 import java.util.Optional;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
+
 @Service
 @RequiredArgsConstructor
 public class CategoryServiceImpl implements CategoryService {
@@ -32,14 +37,13 @@ public class CategoryServiceImpl implements CategoryService {
 
         return mapToDTO(saved);
     }
+    
 
     @Override
-    public List<CategoryResponseDTO> getAllCategories() {
+    public Page<CategoryResponseDTO> getAllCategories(Pageable pageable) {
 
-        return categoryRepository.findAll()
-                .stream()
-                .map(this::mapToDTO)
-                .toList();
+        return categoryRepository.findAll(pageable)
+                                 .map(this::mapToDTO);
     }
     
 
