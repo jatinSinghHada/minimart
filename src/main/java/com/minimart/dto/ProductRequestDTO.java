@@ -19,7 +19,7 @@ public class ProductRequestDTO {
     private String name;
 
     @NotBlank(message = "SKU is required")
-    private String sku;
+    private String sku; 
 
     @NotNull(message = "Price is required")
     @DecimalMin(value = "0.0", inclusive = false,

@@ -50,6 +50,7 @@ public class GlobalExceptionHandler {
         HashMap<String , String> map = new HashMap<>();
 
         map.put("message" , "Database error while updating resource");
+        // ex.printStackTrace();
 
         return new ResponseEntity<>(map ,
             HttpStatus.INTERNAL_SERVER_ERROR);

@@ -8,6 +8,10 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
 
 import java.util.List;
 
@@ -26,12 +30,19 @@ public class ProductController {
     }
 
     @GetMapping
-    public Page<ProductResponseDTO> getAllProducts(@RequestParam(defaultValue = "0") int page,
-        @RequestParam(defaultValue = "5") int size,
-        @RequestParam(required = false) Long categoryId) {
+    public Page<ProductResponseDTO> getAllProducts(@PageableDefault (size=2, page=0, sort="name", direction=Sort.Direction.ASC)
+        Pageable pageable,
+        @RequestParam(required=false) Long categoryId) {
 
-        return productService.getAllProducts(page , size, categoryId);
+        return productService.getAllProducts(pageable, categoryId);
     }
+    // @GetMapping
+    // public Page<ProductResponseDTO> getAllProducts(@RequestParam(defaultValue = "0") int page,
+    //     @RequestParam(defaultValue = "5") int size,
+    //     @RequestParam(required = false) Long categoryId) {
+
+    //     return productService.getAllProducts(page , size, categoryId);
+    // }
 
     @GetMapping("/{id}")
     public ProductResponseDTO getProductById(@PathVariable Long id) {
@@ -49,12 +60,6 @@ public class ProductController {
     public void deleteProduct(@PathVariable Long id) {
 
         productService.deleteProduct(id);
-    }
-
-    @GetMapping("/category/{categoryId}")
-    public List<ProductResponseDTO> getProductsByCategory(@PathVariable Long categoryId) {
-
-        return productService.getProductsByCategory(categoryId);
     }
 
     @GetMapping("/low-stock")
