@@ -14,6 +14,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 
+import com.minimart.exception.DuplicateResourceException;
 import com.minimart.exception.ResourceNotFoundException;
 
 import java.util.List;
@@ -33,6 +34,11 @@ public class ProductServiceImpl implements ProductService {
         ).orElseThrow(() ->
                 new ResourceNotFoundException("Category not found"));
 
+        Boolean findSku = productRepository.existsBySku(requestDTO.getSku());
+        if(findSku) {
+                throw new DuplicateResourceException("Product with SKU '" + requestDTO.getSku() + "' already exists");
+        }
+
         Product product = Product.builder()
                 .name(requestDTO.getName())
                 .sku(requestDTO.getSku())
@@ -47,24 +53,9 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public Page<ProductResponseDTO> getAllProducts(int page, int size, Long categoryId) {
+    public Page<ProductResponseDTO> getAllProducts(Pageable pageable, Long categoryId) {
 
-        Pageable pageable = PageRequest.of(page, size);
-
-        Page<Product> productPage;
-
-        if (categoryId != null) {
-
-                productPage = productRepository
-                        .findByCategoryId(categoryId, pageable);
-
-        } else {
-
-                productPage = productRepository
-                        .findAll(pageable);
-        }
-
-        return productPage.map(this::mapToResponseDTO);
+        return productRepository.findAllProductDTO(pageable, categoryId);
     }
 
     @Override
@@ -108,15 +99,6 @@ public class ProductServiceImpl implements ProductService {
                         new ResourceNotFoundException("Product not found"));
 
         productRepository.delete(product);
-    }
-
-    @Override
-    public List<ProductResponseDTO> getProductsByCategory(Long categoryId) {
-
-        return productRepository.findByCategoryId(categoryId)
-                .stream()
-                .map(this::mapToResponseDTO)
-                .toList();
     }
 
     @Override
